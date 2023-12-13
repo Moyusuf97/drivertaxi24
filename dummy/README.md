@@ -1,7 +1,6 @@
 regular **markdown** here
 
-<div hidden>
-```plantuml
+<div hidden>```plantuml
 @startuml
 actor "User" as user
 participant "Express API" as api
@@ -21,4 +20,5 @@ api -> driver: Update ride status
 driver --> api: Ride updated
 api --> user: Ride confirmed
 @enduml
+
 </div>
