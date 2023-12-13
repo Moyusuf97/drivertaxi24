@@ -1,0 +1,23 @@
+{
+  "drivers": [
+    {
+      "driverId": "driver1",
+      "carNumber": "1",
+      "location": "a",
+      "isAvailable": true
+    },
+    {
+      "driverId": "driver2",
+      "carNumber": "2",
+      "location": "b",
+      "isAvailable": true
+    },
+    {
+      "driverId": "driver3",
+      "carNumber": "3",
+      "location": "c",
+      "isAvailable": false
+    }
+
+  ]
+}

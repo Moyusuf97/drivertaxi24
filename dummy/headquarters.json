@@ -1,0 +1,25 @@
+{
+  "map": {
+    "cars": [
+      {
+        "carNumber": "75",
+        "location": "c",
+        "isAvailable": "false"
+      },
+      {
+        "carNumber": "76",
+        "location": "b",
+        "isAvailable": true
+      },
+      {
+        "carNumber": "78",
+        "location": "a",
+        "isAvailable": true
+      }
+    
+    ]
+  },
+  "ledger": {
+    "sales": []
+  }
+}
