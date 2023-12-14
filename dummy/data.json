@@ -1,0 +1,39 @@
+{
+    "users": [
+      {
+        "userId": "user123",
+        "location": { "latitude": 59.41731, "longitude": 17.92366 }
+      }
+    ],
+    "drivers": [
+      {
+        "driverId": "driver1",
+        "carNumber": "1",
+        "location": { "latitude": 59.40596, "longitude": 17.94685 },
+        "isAvailable": true
+      },
+      {
+        "driverId": "driver2",
+        "carNumber": "2",
+        "location": { "latitude": 59.41499, "longitude": 17.92463 },
+        "isAvailable": true
+      },
+      {
+        "driverId": "driver3",
+        "carNumber": "3",
+        "location": { "latitude": 59.41806, "longitude": 17.91913 },
+        "isAvailable": true
+      }
+    ],
+    "headquarters": {
+      "map": {
+        "cars": [
+          { "carNumber": "75", "location": { "latitude": 59.41806, "longitude": 17.91913 }, "isAvailable": false },
+          { "carNumber": "76", "location": { "latitude": 59.41499, "longitude": 17.92463 }, "isAvailable": true },
+          { "carNumber": "78", "location": { "latitude": 59.40596, "longitude": 17.94685 }, "isAvailable": true }
+        ]
+      },
+      "ledger": { "sales": [] }
+    }
+  }
+  

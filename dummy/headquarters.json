@@ -3,20 +3,28 @@
     "cars": [
       {
         "carNumber": "75",
-        "location": "c",
-        "isAvailable": "false"
+        "location": {
+          "latitude": 30.0,
+          "longitude": 40.0
+        },
+        "isAvailable": false
       },
       {
         "carNumber": "76",
-        "location": "b",
+        "location": {
+          "latitude": 20.0,
+          "longitude": 30.0
+        },
         "isAvailable": true
       },
       {
         "carNumber": "78",
-        "location": "a",
+        "location": {
+          "latitude": 10.0,
+          "longitude": 20.0
+        },
         "isAvailable": true
       }
-    
     ]
   },
   "ledger": {

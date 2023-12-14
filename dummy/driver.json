@@ -3,21 +3,20 @@
     {
       "driverId": "driver1",
       "carNumber": "1",
-      "location": "a",
+      "location": { "latitude": 10, "longitude": 20 },
       "isAvailable": true
     },
     {
       "driverId": "driver2",
       "carNumber": "2",
-      "location": "b",
+      "location": { "latitude": 20, "longitude": 30 },
       "isAvailable": true
     },
     {
       "driverId": "driver3",
       "carNumber": "3",
-      "location": "c",
-      "isAvailable": false
+      "location": { "latitude": 30, "longitude": 40 },
+      "isAvailable": true
     }
-
   ]
 }

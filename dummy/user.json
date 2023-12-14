@@ -1,4 +1,7 @@
 {
   "userId": "user123",
-  "location": "d"
+  "location": {
+    "latitude": 40.0,
+    "longitude": 50.0
+  }
 }

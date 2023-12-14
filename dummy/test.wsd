@@ -1,0 +1,143 @@
+@startuml s
+
+!define RECTANGLE class
+
+skinparam class {
+  BackgroundColor #FFD700
+  BorderColor #000000
+  ArrowColor #000000
+  HeaderBackgroundColor #FFD700
+}
+
+class UserAppController {
+  + register()
+  + login()
+  + requestRide()
+  + viewEstimatedFare()
+  + updateLocation()
+  + viewDriversOnMap()
+}
+
+class DriverAppController {
+  + register()
+  + login()
+  + acceptRide()
+  + markAvailable()
+  + updateLocation()
+}
+
+class AuthService {
+  + generateToken()
+  + verifyToken()
+}
+
+class RideService {
+  + searchRide()
+  + createRideRequest()
+  + getEstimatedFare()
+}
+
+class FareCalculator {
+  + calculateFare()
+}
+
+class LocationService {
+  + trackLocation()
+}
+
+class Firebase_RealtimeDatabase {
+  + storeData()
+  + queryData()
+}
+
+class GoogleMapsSDK {
+  + displayMap()
+  + getDirections()
+}
+
+class Firebase_UserManagement {
+  + authenticateUser()
+  + manageUserProfile()
+}
+
+class Firebase_Deployment {
+  + deployApplication()
+}
+
+class ExpressNodeServer_UserApp {
+  + handleUserAppRequests()
+}
+
+class ExpressNodeServer_DriverApp {
+  + handleDriverAppRequests()
+}
+
+class ReactUserApp {
+  + UIComponents()
+  + handleUserInteractions()
+}
+
+class ReactDriverApp {
+  + UIComponents()
+  + handleDriverInteractions()
+}
+
+class FrontendDeveloper {
+  + UIComponents()
+  + handleUserInteractions()
+}
+
+class BackendDeveloper {
+  + handleUserAppRequests()
+  + handleDriverAppRequests()
+}
+
+class DevOps {
+  + deployApplication()
+  + manageUsersInFirebase()  
+}
+
+FrontendDeveloper --> ReactUserApp : <<develops>>
+FrontendDeveloper --> ReactDriverApp : <<develops>>
+
+BackendDeveloper --> ExpressNodeServer_UserApp : <<develops>>
+BackendDeveloper --> ExpressNodeServer_DriverApp : <<develops>>
+BackendDeveloper --> RideService : <<develops>>
+BackendDeveloper --> AuthService : <<develops>>
+BackendDeveloper --> LocationService : <<develops>>
+BackendDeveloper --> Firebase_RealtimeDatabase : <<develops>>
+
+DevOps --> Firebase_Deployment : <<manages>>
+
+ReactUserApp --> ExpressNodeServer_UserApp : <<communicates>>
+ReactDriverApp --> ExpressNodeServer_DriverApp : <<communicates>>
+
+ExpressNodeServer_UserApp --> ExpressNodeServer_DriverApp : <<communicates>>
+
+Firebase_Deployment --> ReactUserApp : <<deploys>>
+Firebase_Deployment --> ReactDriverApp : <<deploys>>
+Firebase_Deployment --> ExpressNodeServer_UserApp : <<deploys>>
+Firebase_Deployment --> ExpressNodeServer_DriverApp : <<deploys>>
+
+UserAppController --|> AuthService : <<uses>>
+DriverAppController --|> AuthService : <<uses>>
+UserAppController --|> RideService : <<uses>>
+DriverAppController --|> RideService : <<uses>>
+UserAppController --|> LocationService : <<uses>>
+DriverAppController --|> LocationService : <<uses>>
+RideService --|> FareCalculator : <<uses>>
+RideService --|> Firebase_RealtimeDatabase : <<uses>>  
+RideService --|> GoogleMapsSDK : <<uses>>
+ExpressNodeServer_UserApp --> UserAppController : <<handles>>
+ExpressNodeServer_DriverApp --> DriverAppController : <<handles>>
+ExpressNodeServer_UserApp --> RideService : <<uses>>
+ExpressNodeServer_DriverApp --> RideService : <<uses>>
+ExpressNodeServer_UserApp --> Firebase_RealtimeDatabase : <<uses>> 
+ExpressNodeServer_DriverApp --> Firebase_RealtimeDatabase : <<uses>>  
+ExpressNodeServer_UserApp --> Firebase_UserManagement : <<uses>>
+ExpressNodeServer_DriverApp --> Firebase_UserManagement : <<uses>>
+ReactUserApp --> UserAppController : <<interacts>>
+ReactDriverApp --> DriverAppController : <<interacts>>
+Firebase_Deployment --> Firebase_UserManagement : <<uses>>
+
+@enduml
