@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const port = 4000;
+const NodeGeocoder = require('node-geocoder');
 
 app.use(express.json());
 
@@ -77,6 +78,40 @@ app.post('/request-ride', (req, res) => {
 app.get('/drivers', (req, res) => {
   res.json(data.drivers);
 });
+
+
+const options = {
+  provider: 'openstreetmap',
+};
+
+const geocoder = NodeGeocoder(options);
+
+app.use(cors());
+
+app.get('/reverse-geocode', async (req, res) => {
+  const { lat, lon, lang, format, key } = req.query;
+
+  try {
+    const result = await geocoder.reverse({ lat, lon, language: lang, format });
+    res.json(result);
+  } catch (error) {
+    console.error('Error making reverse geocoding request:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.post('/reverse-geocode', async (req, res) => {
+  const { lat, lon, lang, format } = req.body;
+
+  try {
+    const result = await geocoder.reverse({ lat, lon, language: lang, format });
+    res.json(result);
+  } catch (error) {
+    console.error('Error making reverse geocoding request:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
