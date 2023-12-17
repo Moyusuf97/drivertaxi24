@@ -113,6 +113,22 @@ app.post('/reverse-geocode', async (req, res) => {
   }
 });
 
+app.post('/driver', (req, res) => {
+  const { startAddress, endAddress, otherDetails } = req.body;
+
+  console.log('Received ride request:');
+  console.log('Start Address:', startAddress);
+  console.log('End Address:', endAddress);
+  console.log('Other Details:', otherDetails);
+
+  res.json({
+    message: 'Driver receives info about the requested ride.',
+    startAddress,
+    endAddress,
+    otherDetails,
+  });
+});
+
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
