@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const User = require('./models/user');
 const checkToken = require('./authMiddleware');
 
+/*
 const router = express.Router();
 
 
@@ -50,7 +51,6 @@ router.post('/login', async (req, res) => {
 
 router.delete('/delete', checkToken, async (req, res) => {
   try {
-    // Assuming `req.user.id` contains the ID of the authenticated user
     let user = await User.findById(req.user.id);
 
     if (!user) {
@@ -63,5 +63,5 @@ router.delete('/delete', checkToken, async (req, res) => {
     res.status(500).json({ msg: error.message });
   }
 });
-
+*/
 module.exports = router;
