@@ -2,8 +2,9 @@ require('dotenv').config();
 
 
 const express = require('express');
+const admin = require('firebase-admin');
 const User = require('./models/user')
-const connectDB = require('./config/mongoose');
+const initializeFirebaseAdmin = require('./config/firebasedatabase');
 const authRoutes = require('./authRoutes');
 const checkToken = require('./authMiddleware');
 const app = express();
@@ -11,7 +12,7 @@ const app = express();
 
 
 
-connectDB();
+initializeFirebaseAdmin();
 
 
 app.use(express.json());
@@ -27,6 +28,17 @@ app.get('/api/profile', checkToken, async (req, res) => {
     res.json(user);
   } catch (error) {
     res.status(500).json({ msg: error.message });
+  }
+});
+
+app.get('/getUser', async (req, res) => {
+  try {
+    const snapshot = await admin.database().ref('/user').once('value');
+    const userData = snapshot.val();
+    res.json(userData);
+  } catch (error) {
+    console.error('Error retrieving data:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
