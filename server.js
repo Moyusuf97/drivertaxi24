@@ -1,7 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const admin = require('firebase-admin');
-const serviceAccount = require('./RealTime-data.json');
+//const serviceAccount = require('./RealTime-data.json');
+const serviceAccount = require ('./firebaseadmin.json');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
@@ -54,17 +55,14 @@ app.post('/registerUser', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Implement user registration logic using Firebase Authentication
-    // Note: This is a simplified example; make sure to add proper error handling and validation
+   
     const userRecord = await admin.auth().createUser({
       email,
       password,
     });
 
-    // Save additional user data to Realtime Database
     await admin.database().ref(`/users/${userRecord.uid}`).set({
       email,
-      // Add more user data as needed
     });
 
     res.status(201).json({ msg: 'User registered successfully' });
@@ -78,14 +76,11 @@ app.post('/registerGoogleUser', async (req, res) => {
       const { idToken } = req.body;
       console.log('Received idToken:', idToken);
   
-      // Verify Google ID token
       const decodedToken = await admin.auth().verifyIdToken(idToken);
       const { uid, email } = decodedToken;
   
-      // Save additional user data to Realtime Database
       await admin.database().ref(`/users/${uid}`).set({
         email,
-        // Add more user data as needed
       });
   
       console.log('User registered successfully');
