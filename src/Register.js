@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
 import './style/register.css';
+import { app } from './firebase-config';// Import your Firebase app
+import { getFirestore, addDoc, collection } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { useNavigate } from 'react-router-dom';
+
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +15,11 @@ const Register = () => {
     driversLicensePhoto: null,
     personalPhoto: null
   });
+  const navigate = useNavigate();
+
+  // Firestore and Storage references
+  const firestore = getFirestore(app);
+  const storage = getStorage(app);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -26,9 +36,29 @@ const Register = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
+    const uploadFile = async (file) => {
+      if (!file) return null;
+      const fileRef = ref(storage, `images/${file.name}`);
+      const snapshot = await uploadBytes(fileRef, file);
+      return getDownloadURL(snapshot.ref);
+    };
+
+    const driversLicensePhotoUrl = await uploadFile(formData.driversLicensePhoto);
+    const personalPhotoUrl = await uploadFile(formData.personalPhoto);
+
+    const docRef = await addDoc(collection(firestore, "users"), {
+      email: formData.email,
+      phoneNumber: formData.phoneNumber,
+      dateOfBirth: formData.dateOfBirth,
+      driversLicenseNumber: formData.driversLicenseNumber,
+      driversLicensePhotoUrl,
+      personalPhotoUrl
+    });
+
+    console.log('User registered with ID:', docRef.id);
   };
 
   return (
