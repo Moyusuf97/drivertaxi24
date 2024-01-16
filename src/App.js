@@ -16,6 +16,7 @@ function App() {
           </nav>
         </header>
         <Routes>
+          <Route path="/" element={<><Login /><Register /></>} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>

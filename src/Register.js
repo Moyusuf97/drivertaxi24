@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import './style/register.css';
-import { app } from './firebase-config';// Import your Firebase app
-import { getFirestore, addDoc, collection } from 'firebase/firestore';
+import { app,database } from './firebase-config';
+import { ref as dbRef, push } from 'firebase/database';
+// import { getFirestore, addDoc, collection } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { useNavigate } from 'react-router-dom';
-
+// import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -15,10 +15,8 @@ const Register = () => {
     driversLicensePhoto: null,
     personalPhoto: null
   });
-  const navigate = useNavigate();
-
-  // Firestore and Storage references
-  const firestore = getFirestore(app);
+  // const navigate = useNavigate();
+  // const firestore = getFirestore(app);
   const storage = getStorage(app);
 
   const handleChange = (e) => {
@@ -38,7 +36,6 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const uploadFile = async (file) => {
       if (!file) return null;
       const fileRef = ref(storage, `images/${file.name}`);
@@ -49,78 +46,81 @@ const Register = () => {
     const driversLicensePhotoUrl = await uploadFile(formData.driversLicensePhoto);
     const personalPhotoUrl = await uploadFile(formData.personalPhoto);
 
-    const docRef = await addDoc(collection(firestore, "users"), {
-      email: formData.email,
-      phoneNumber: formData.phoneNumber,
-      dateOfBirth: formData.dateOfBirth,
-      driversLicenseNumber: formData.driversLicenseNumber,
-      driversLicensePhotoUrl,
-      personalPhotoUrl
-    });
+    const newUserRef = dbRef(database, 'pendingRegistrations');
+  push(newUserRef, {
+    email: formData.email,
+    phoneNumber: formData.phoneNumber,
+    dateOfBirth: formData.dateOfBirth,
+    driversLicenseNumber: formData.driversLicenseNumber,
+    driversLicensePhotoUrl,
+    personalPhotoUrl
+  }).then(() => {
+    console.log('User registration data is pending approval');
 
-    console.log('User registered with ID:', docRef.id);
-  };
-
-  return (
-    <div className="register-form-container">
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
-          <input 
-            type="email" 
-            name="email" 
-            value={formData.email}
-            onChange={handleChange} 
-          />
-        </div>
-        <div>
-          <label>Phone Number:</label>
-          <input 
-            type="tel" 
-            name="phoneNumber" 
-            value={formData.phoneNumber}
-            onChange={handleChange} 
-          />
-        </div>
-        <div>
-          <label>Date of Birth:</label>
-          <input 
-            type="date" 
-            name="dateOfBirth" 
-            value={formData.dateOfBirth}
-            onChange={handleChange} 
-          />
-        </div>
-        <div>
-          <label>Driver's License Number:</label>
-          <input 
-            type="text" 
-            name="driversLicenseNumber" 
-            value={formData.driversLicenseNumber}
-            onChange={handleChange} 
-          />
-        </div>
-        <div>
-          <label>Upload Driver's License Photo:</label>
-          <input 
-            type="file" 
-            name="driversLicensePhoto" 
-            onChange={handleChange} 
-          />
-        </div>
-        <div>
-          <label>Upload Personal Photo:</label>
-          <input 
-            type="file" 
-            name="personalPhoto" 
-            onChange={handleChange} 
-          />
-        </div>
-        <button type="submit">Register</button>
-      </form>
-    </div>
-  );
+  }).catch((error) => {
+    console.error("Error saving data: ", error);
+  });
+};
+return (
+  <div className="register-form-container">
+    <h2>Register</h2>
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>Email:</label>
+        <input 
+          type="email" 
+          name="email" 
+          value={formData.email}
+          onChange={handleChange} 
+        />
+      </div>
+      <div>
+        <label>Phone Number:</label>
+        <input 
+          type="tel" 
+          name="phoneNumber" 
+          value={formData.phoneNumber}
+          onChange={handleChange} 
+        />
+      </div>
+      <div>
+        <label>Date of Birth:</label>
+        <input 
+          type="date" 
+          name="dateOfBirth" 
+          value={formData.dateOfBirth}
+          onChange={handleChange} 
+        />
+      </div>
+      <div>
+        <label>Driver's License Number:</label>
+        <input 
+          type="text" 
+          name="driversLicenseNumber" 
+          value={formData.driversLicenseNumber}
+          onChange={handleChange} 
+        />
+      </div>
+      <div>
+        <label>Upload Driver's License Photo:</label>
+        <input 
+          type="file" 
+          name="driversLicensePhoto" 
+          onChange={handleChange} 
+        />
+      </div>
+      <div>
+        <label>Upload Personal Photo:</label>
+        <input 
+          type="file" 
+          name="personalPhoto" 
+          onChange={handleChange} 
+        />
+      </div>
+      <button type="submit">Register</button>
+    </form>
+  </div>
+);
 };
 
 export default Register;
