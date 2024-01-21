@@ -1,126 +1,75 @@
 import React, { useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import './style/register.css';
-import { app,database } from './firebase-config';
-import { ref as dbRef, push } from 'firebase/database';
-// import { getFirestore, addDoc, collection } from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-// import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
-    phoneNumber: '',
-    dateOfBirth: '',
-    driversLicenseNumber: '',
-    driversLicensePhoto: null,
-    personalPhoto: null
+    password: ''
   });
-  // const navigate = useNavigate();
-  // const firestore = getFirestore(app);
-  const storage = getStorage(app);
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "driversLicensePhoto" || name === "personalPhoto") {
-      setFormData({
-        ...formData,
-        [name]: files[0]
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value
-      });
-    }
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const uploadFile = async (file) => {
-      if (!file) return null;
-      const fileRef = ref(storage, `images/${file.name}`);
-      const snapshot = await uploadBytes(fileRef, file);
-      return getDownloadURL(snapshot.ref);
-    };
 
-    const driversLicensePhotoUrl = await uploadFile(formData.driversLicensePhoto);
-    const personalPhotoUrl = await uploadFile(formData.personalPhoto);
+    
+    fetch('http://localhost:3500/api/drivers/register', { 
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: formData.email,
+        password: formData.password
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Registration successful:', data);
+      navigate('/more-details')
+    })
+    .catch((error) => {
+      console.error('Error during registration:', error);
+      // Handle registration error (show error message to the driver)
+    });
+  };
 
-    const newUserRef = dbRef(database, 'pendingRegistrations');
-  push(newUserRef, {
-    email: formData.email,
-    phoneNumber: formData.phoneNumber,
-    dateOfBirth: formData.dateOfBirth,
-    driversLicenseNumber: formData.driversLicenseNumber,
-    driversLicensePhotoUrl,
-    personalPhotoUrl
-  }).then(() => {
-    console.log('User registration data is pending approval');
-
-  }).catch((error) => {
-    console.error("Error saving data: ", error);
-  });
-};
-return (
-  <div className="register-form-container">
-    <h2>Register</h2>
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Email:</label>
-        <input 
-          type="email" 
-          name="email" 
-          value={formData.email}
-          onChange={handleChange} 
-        />
-      </div>
-      <div>
-        <label>Phone Number:</label>
-        <input 
-          type="tel" 
-          name="phoneNumber" 
-          value={formData.phoneNumber}
-          onChange={handleChange} 
-        />
-      </div>
-      <div>
-        <label>Date of Birth:</label>
-        <input 
-          type="date" 
-          name="dateOfBirth" 
-          value={formData.dateOfBirth}
-          onChange={handleChange} 
-        />
-      </div>
-      <div>
-        <label>Driver's License Number:</label>
-        <input 
-          type="text" 
-          name="driversLicenseNumber" 
-          value={formData.driversLicenseNumber}
-          onChange={handleChange} 
-        />
-      </div>
-      <div>
-        <label>Upload Driver's License Photo:</label>
-        <input 
-          type="file" 
-          name="driversLicensePhoto" 
-          onChange={handleChange} 
-        />
-      </div>
-      <div>
-        <label>Upload Personal Photo:</label>
-        <input 
-          type="file" 
-          name="personalPhoto" 
-          onChange={handleChange} 
-        />
-      </div>
-      <button type="submit">Register</button>
-    </form>
-  </div>
-);
+  return (
+    <div className="register-form-container">
+      <h2>Driver Registration</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Email:</label>
+          <input 
+            type="email" 
+            name="email" 
+            value={formData.email}
+            onChange={handleChange} 
+            required
+          />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input 
+            type="password" 
+            name="password" 
+            value={formData.password}
+            onChange={handleChange} 
+            required
+          />
+        </div>
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  );
 };
 
 export default Register;
