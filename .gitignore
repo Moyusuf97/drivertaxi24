@@ -25,3 +25,4 @@ yarn-error.log*
 
 RealTime-data.json
 firebase-config.js
+node_modules
