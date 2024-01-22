@@ -12,12 +12,12 @@ function App() {
         <header className="App-header">
           <h1>Welcome, Driver</h1>
           <nav>
-            <Link to="/login">Login</Link> | 
+            <Link to="/login">Login</Link> 
             <Link to="/register">Register</Link>
           </nav>
         </header>
         <Routes>
-          <Route path="/" element={<><Login /><Register /></>} />
+          <Route path="/" element={<Login/>} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/more-details" element={<FormInfo />} />
