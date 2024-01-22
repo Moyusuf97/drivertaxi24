@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 const FormInfo = () => {
@@ -9,6 +10,8 @@ const FormInfo = () => {
     carModel: '',
     licenseImage: null
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [feedback, setFeedback] = useState('');
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -27,30 +30,29 @@ const FormInfo = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // This should be the UID from the authentication state
-    // Assuming you store the authenticated user's UID in local storage/session storage
+    setIsLoading(true); 
+    setFeedback(''); 
+  
     const uid = localStorage.getItem('userUID'); 
-
     const formDataToSend = new FormData();
     formDataToSend.append('fullName', formData.fullName);
     formDataToSend.append('carModel', formData.carModel);
     formDataToSend.append('licenseImage', formData.licenseImage);
     formDataToSend.append('uid', uid); // Append UID to the form data
-
-    fetch('http://localhost:3500/api/drivers/details', {
-      method: 'POST',
-      body: formDataToSend
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Driver details updated:', data);
+  
+    try {
+      const response = await axios.post('http://localhost:3500/api/drivers/details', formDataToSend);
+      console.log('Driver details updated:', response.data);
+      setFeedback('Driver details updated successfully!'); // Set success message
       navigate('/dash'); // Redirect to dashboard or confirmation page
-    })
-    .catch(error => {
+    } catch (error) {
       console.error('Error:', error);
-    });
+      setFeedback(error.response?.data?.message || 'Failed to update driver details.'); // Set error message from server if available
+    } finally {
+      setIsLoading(false); 
+    }
   };
+
 
   return (
     <div className="form-info-container">
@@ -85,7 +87,10 @@ const FormInfo = () => {
             required
           />
         </div>
-        <button type="submit">Submit Information</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Submitting...' : 'Submit Information'}
+        </button>
+        {feedback && <p>{feedback}</p>}
       </form>
     </div>
   );

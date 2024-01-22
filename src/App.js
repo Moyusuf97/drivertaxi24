@@ -4,6 +4,7 @@ import Login from './Login';
 import Register from './Register';
 import './App.css';
 import FormInfo from './FormInfo';
+import DriverMap from './DriverMap';
 
 function App() {
   return (
@@ -21,6 +22,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/more-details" element={<FormInfo />} />
+          <Route path="/dash" element={<DriverMap/>} />
+
         </Routes>
       </div>
     </Router> 

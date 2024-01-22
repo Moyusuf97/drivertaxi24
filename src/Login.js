@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from './firebase-config'; // Adjust this path if your firebase-config.js is in a different directory
+import { auth } from './firebase-config'; // Import Firebase auth
 
 const Login = () => {
   const navigate = useNavigate();
@@ -23,16 +23,15 @@ const Login = () => {
     e.preventDefault();
     setLoginError('');
 
-    signInWithEmailAndPassword(auth, formData.email, formData.password)
-      .then((userCredential) => {
-        // Login successful
-        console.log('Login successful:', userCredential.user);
-        navigate('/more-details'); // Navigate to another route upon successful login
-      })
-      .catch((error) => {
-        console.error('Error during login:', error.message);
-        setLoginError('Login failed. Please check your credentials.'); // Update the UI to show a login error message
-      });
+    try {
+      // Sign in with Firebase Authentication
+      await signInWithEmailAndPassword(auth, formData.email, formData.password);
+      console.log('Login successful');
+      navigate('/more-details'); // Navigate to another route upon successful login
+    } catch (error) {
+      console.error('Error during login:', error.message);
+      setLoginError('Login failed. Please check your credentials.'); // Show login error
+    }
   };
 
   return (
