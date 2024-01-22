@@ -34,7 +34,7 @@ const Register = () => {
     .then(response => response.json())
     .then(data => {
       console.log('Registration successful:', data);
-      navigate('/more-details')
+      navigate('/login')
     })
     .catch((error) => {
       console.error('Error during registration:', error);
