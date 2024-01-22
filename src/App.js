@@ -12,10 +12,10 @@ function App() {
       <div className="App">
         <header className="App-header">
           <h1>Welcome, Driver</h1>
-          <nav>
+         {/* <nav>
             <Link to="/login">Login</Link> 
             <Link to="/register">Register</Link>
-          </nav>
+          </nav>*/}
         </header>
         <Routes>
           <Route path="/" element={<Login/>} />
