@@ -27,7 +27,7 @@ const Login = () => {
       // Sign in with Firebase Authentication
       await signInWithEmailAndPassword(auth, formData.email, formData.password);
       console.log('Login successful');
-      navigate('/more-details'); // Navigate to another route upon successful login
+      navigate('/dash'); 
     } catch (error) {
       console.error('Error during login:', error.message);
       setLoginError('Login failed. Please check your credentials.'); // Show login error
