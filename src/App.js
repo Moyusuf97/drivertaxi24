@@ -3,6 +3,7 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import Register from './Component/Register';
 import Login from './Component/Login';
+import Landing from './Component/LandingPage';
 
 
 
@@ -19,6 +20,7 @@ function App() {
           <Routes>
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/Landing" element={<Landing />} />
             <Route path="/" element={
               <p>
                 Edit <code>src/App.js</code> and save to reload.

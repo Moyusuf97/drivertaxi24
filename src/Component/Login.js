@@ -22,6 +22,7 @@ const handleLogin = async (event) => {
       if (response.ok) {
         // Save the JWT in local storage
         localStorage.setItem('driverToken', data.token);
+        navigate("/Landing")
         // e.g., redirect to a dashboard
       } else {
         setLoginError(data.message);
